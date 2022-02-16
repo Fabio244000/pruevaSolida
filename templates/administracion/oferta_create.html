@@ -1,0 +1,40 @@
+{% extends 'administracion/base.html'%}
+
+{% block import_head %}
+
+{% endblock %}
+
+
+{% block title_page%}
+    {%  if state == 'create' %}
+        Crear Nueva Oferta
+    {% else %}
+        Editar oferta
+    {% endif %}
+{% endblock %}
+
+
+{% block content%}
+    {% if message %} <span style="color: green">{{ message|safe }}</span> {% endif %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div>
+            <button class="btn btn-primary">{{ button_text }}</button>
+            <a href="{% url 'listar_ofertas' %}">
+                <input class="btn btn-secondary" type="button" value="Cancelar">
+            </a>
+        </div>
+    </form>
+    <script>
+      $(function () {
+        $("#datetimepicker1").datetimepicker({
+          format: 'DD/MM/YYYY HH:mm',
+        });
+      });
+</script>
+{% endblock %}
+
+{% block import_footer %}
+
+{% endblock %}

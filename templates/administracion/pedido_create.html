@@ -1,0 +1,45 @@
+{% extends 'administracion/base.html'%}
+
+{% block import_head %}
+
+{% endblock %}
+
+
+{% block title_page%}
+    {%  if state == 'create' %}
+        Crear Pedido
+    {% else %}
+        Editar Pedido
+    {% endif %}
+{% endblock %}
+
+{% block content%}
+    {% if state == 'edit' %}
+        <div>
+            <a href="#">
+                <input class="btn btn-success" type="button" value="Marcar Ubicacion">
+            </a>
+            <a href="#">
+                <input class="btn btn-info" type="button" value="Datos del clientes">
+            </a>
+        </div>
+        <hr>
+
+    {% endif %}
+
+    {% if message %} <span style="color: green">{{ message|safe }}</span> {% endif %}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div>
+            <button class="btn btn-primary">{{ button_text }}</button>
+            <a href="{% url 'listar_pedido' %}">
+               <input class="btn btn-secondary" type="button" value="Cancelar" />
+            </a>
+        </div>
+    </form>
+{% endblock %}
+
+{% block import_footer %}
+
+{% endblock %}

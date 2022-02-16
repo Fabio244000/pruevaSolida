@@ -1,0 +1,79 @@
+{% extends 'administracion/base.html'%}
+{% load leaflet_tags %}
+{% block import_head %}
+{% endblock %}
+{% load static %}
+
+{% block title_page%}
+    Panel de Administración de Tags
+{% endblock %}
+
+{% block content%}
+    <div>
+        <a href="{% url 'crear_tag' %}">
+            <input type="button" class="btn btn-primary" value="Crear Nuevo Tag">
+        </a>
+    </div>
+	<h3 class="box-title">Tabla de Tags</h3>
+	<div class="table-responsive">
+	    <table class="table text-nowrap">
+	        <thead>
+	            <tr>
+	                <th class="border-top-0">Id</th>
+	                <th class="border-top-0">Nombre</th>
+	                <th class="border-top-0">Editar</th>
+	                <th class="border-top-0">Ver</th>
+	                <th class="border-top-0">Eliminar</th>
+	            </tr>
+	        </thead>
+	        <tbody>
+                {% for tag in tags %}
+                    <tr>
+                        <td>{{ tag.id}}</td>
+                        <td>{{ tag.nombre }}</td>
+                        <td>
+                            <a href="{% url 'editar_tag' pk=tag.pk %}">
+                                <input class="btn btn-primary" type="button" value="Editar">
+                            </a>
+                        </td>
+                        <td>
+                            <a href="{% url 'ver_tag' pk=tag.pk%}">
+                                <input class="btn btn-primary" type="button" value="Ver">
+                            </a>
+                        </td>
+                        <td>
+                            <button id="boton-mostrar" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ tag.pk }}" data-db="{{ tag.pk }}">
+                                Eliminar
+                            </button>
+                        </td>
+                        <!-- Modal -->
+                        <div class="modal fade" id="exampleModal-{{ tag.pk }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel">Eliminar Categoría:</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <p style="text-align: left; font-size: large">¿Está seguro de eliminar el Tag: <strong>{{ tag.nombre }}</strong>?</p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <form action="{% url 'eliminar_tag' pk=tag.pk%}" method="post">
+                                            {% csrf_token %}
+                                             <button class="btn btn-danger" type="submit">Confirmar</button>
+                                        </form>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </tr>
+                {% endfor %}
+	        </tbody>
+	    </table>
+	</div>
+{% endblock %}
+
+{% block import_footer %}
+
+{% endblock %}

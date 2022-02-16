@@ -1,0 +1,90 @@
+{% extends 'administracion/base.html'%}
+
+{% block import_head %}
+
+{% endblock %}
+
+
+{% block title_page%}
+    Panel de administración de Oferta
+{% endblock %}
+
+
+{% block content%}
+    <div>
+        <a href="{% url 'crear_oferta' %}">
+            <input type="button" class="btn btn-primary" value="Crear Nueva Oferta">
+        </a>
+    </div>
+	<h3 class="box-title">Tabla de Ofertas</h3>
+	<div class="table-responsive">
+	    <table class="table text-nowrap">
+	        <thead>
+	            <tr>
+	                <th class="border-top-0">Id</th>
+	                <th class="border-top-0">Descripción</th>
+	                <th class="border-top-0">Fecha de inicio</th>
+	                <th class="border-top-0">Fecha de finalización</th>
+	                <th class="border-top-0">Activo</th>
+                    <th class="border-top-0">Editar</th>
+	                <th class="border-top-0">Ver</th>
+	                <th class="border-top-0">Eliminar</th>
+	            </tr>
+	        </thead>
+	        <tbody>
+            {% for oferta in ofertas %}
+                <tr>
+                    <td>{{ oferta.id }}</td>
+                    <td>{{ oferta.descripcion }}</td>
+                    <td>{{ oferta.fechaInicio }}</td>
+                    <td>{{ oferta.fechaFin }}</td>
+                    {% if oferta.activo  is True %}
+                        <td><p>Si</p> </td>
+                    {% else %}
+                        <td><p>No</p> </td>
+                    {% endif %}
+                    <td>
+                        <a href="{% url 'editar_oferta' pk=oferta.pk %}">
+                            <input class="btn btn-primary" type="button" value="Editar">
+                        </a>
+                    </td>
+                    <td>
+                        <a href="{% url 'ver_oferta' pk=oferta.pk %}">
+                            <input class="btn btn-primary" type="button" value="Ver">
+                        </a>
+                    </td>
+                    <td>
+                        <button id="boton-mostrar" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ oferta.pk }}" data-db="{{ oferta.pk }}">
+                              Eliminar
+                        </button>
+                    </td>
+                </tr>
+                <div class="modal fade" id="exampleModal-{{ oferta.pk }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Eliminar Oferta: </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p style="text-align: left; font-size: large">¿Está seguro de eliminar el oferta: <strong>{{ oferta.descripcion }}</strong>?</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <form action="{% url 'eliminar_oferta' pk=oferta.pk%}" method="post">
+                                        {% csrf_token %}
+                                         <button class="btn btn-danger" type="submit">Confirmar</button>
+                                    </form>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+            {% endfor %}
+	        </tbody>
+	    </table>
+	</div>
+{% endblock %}
+
+{% block import_footer %}
+
+{% endblock %}

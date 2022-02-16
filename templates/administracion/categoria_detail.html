@@ -1,0 +1,30 @@
+{% extends 'administracion/base.html'%}
+
+{% block import_head %}
+
+{% endblock %}
+
+
+{% block title_page%}
+    Detalles de la Categoría
+{% endblock %}
+
+
+{% block content%}
+    <div id="categoria-detalle">
+        <h3 style="text-align: left; font-size: large">Nombre: <strong>{{ categoria.nombre }}</strong></h3>
+        <img style="font-size: large" src="#" alt="foto de referencia de la categoria">
+        {% if categoria.activo is True %}
+            <p style="text-align: left; font-size: large">Activo: <strong>Si</strong></p>
+        {% else %}
+            <p style="text-align: left; font-size: large">Activo: No</p>
+        {% endif %}
+        <a href="{% url 'listar_categoria' %}">
+            <input type="button" class="btn btn-primary" value="Volver">
+        </a>
+    </div>
+{% endblock %}
+
+{% block import_footer %}
+
+{% endblock %}

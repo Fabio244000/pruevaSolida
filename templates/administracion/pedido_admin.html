@@ -1,0 +1,139 @@
+{% extends 'administracion/base.html'%}
+{% load leaflet_tags %}
+{% block import_head %}
+{% endblock %}
+{% load static %}
+
+{% block title_page%}
+    Panel de Administración de Pedido
+{% endblock %}
+
+{% block content%}
+    <div>
+        <a href="{% url 'crear_pedido' %}">
+            <input type="button" class="btn btn-primary" value="Crear pedido">
+        </a>
+    </div>
+    <div>
+    <ul>
+    {% for pedido in pedidos_map %}
+        <li>{{ pedido.id }}</li>
+    {% endfor %}
+    </ul>
+    </div>
+        {% leaflet_map "mapa_pedido" callback="window.map_setup"%}
+    <style>
+
+        .leaflet-container {  /* all maps */
+            width:  100%;
+            height: 600px;
+        }
+
+        #specialbigmap {
+            height: 800px;
+        }
+
+        /* Resize the "display_raw" textbox */
+        .django-leaflet-raw-textarea {
+            width: 100%;
+        }
+
+    </style>
+	<h3 class="box-title">Tabla de Pedidos</h3>
+	<div class="table-responsive">
+	    <table class="table text-nowrap">
+	        <thead>
+	            <tr>
+	                <th class="border-top-0">Id</th>
+	                <th class="border-top-0">Cliente</th>
+	                <th class="border-top-0">Fecha</th>
+	                <th class="border-top-0">Estado</th>
+	                <th class="border-top-0">Pagado</th>
+                    <th class="border-top-0">Opciones</th>
+	            </tr>
+	        </thead>
+
+	        <tbody>
+                {% for pedido in pedidos %}
+                    <tr>
+                        <td>{{ pedido.id}}</td>
+                        <td>{{ pedido.cliente }}</td>
+                        <td>{{ pedido.hora_pedido }}</td>
+                        <td>{{ pedido.estado }}</td>
+                            {% if pedido.pagado is True %}
+                                <td><p>Si</p></td>
+                            {% else %}
+                                <td><p>No</p></td>
+                            {% endif %}
+                        <td>
+                            <!-- Button trigger modal -->
+                            <button id="boton-mostrar" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal-{{ pedido.pk }}" data-db="{{ pedido.pk }}">
+                              Mostrar
+                            </button>
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModal-{{ pedido.pk }}" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">Opciones de Pedido</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <a href="{% url 'ver_pedido' pk=pedido.pk %}">
+                                                <input class="btn btn-primary" type="button" value="Ver">
+                                            </a>
+                                            <a href="{% url 'editar_pedido' pk=pedido.pk %}">
+                                                <input class="btn btn-primary" type="button" value="Editar">
+                                            </a>
+                                            <a href="{% url 'pagar_pedido' pk=pedido.pk %}">
+                                                <input class="btn btn-info" type="button" value="Pagar">
+                                            </a>
+                                            <a href="{% url 'eliminar_pedido' pk=pedido.pk %}">
+                                                <input type="button" class="btn btn-danger" value="Eliminar">
+                                            </a>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                    </tr>
+
+                {% endfor %}
+	        </tbody>
+	    </table>
+    <script type="text/javascript">
+
+        function  map_setup(map, options){
+            let personalIcon = new L.Icon({
+                iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png',
+                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+                iconSize: [25, 41],
+                iconAnchor: [12, 41],
+                popupAnchor: [1, -34],
+                shadowSize: [41, 41]
+            });
+
+            let list_pedidos_map = {{ pedidos_map_json|safe }}.pedidos;
+
+
+            let markers = []
+            list_pedidos_map.forEach(pedido => {
+                markers.push(L.marker([pedido.lat, pedido.lng], {icon: personalIcon}).bindPopup(`<p>Pedido ${pedido.id}: <a href="${pedido.id}/ver/">Ver pedido</a> <br>
+                                                                                                    Hora: <strong>${pedido.hora_pedido}</strong> <br>
+                                                                                                    Cliente: <strong>${pedido.cliente}</strong> <br>
+                                                                                                    Contecto: <strong>${pedido.contacto_cliente}</strong></p>`).addTo(map))
+
+            })
+
+        }
+    </script>
+	</div>
+{% endblock %}
+
+{% block import_footer %}
+
+{% endblock %}

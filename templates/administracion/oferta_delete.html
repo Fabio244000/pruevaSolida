@@ -1,0 +1,28 @@
+{% extends 'administracion/base.html'%}
+
+{% block import_head %}
+
+{% endblock %}
+
+
+{% block title_page%}
+    Eliminar Oferta: {{ oferta.id }}
+{% endblock %}
+
+
+{% block content%}
+    <div id="categoria-delete">
+        <form method="post">
+            {% csrf_token %}
+            <p style="text-align: left; font-size: large">¿Estas seguro de eliminar el oferta: <strong>{{ oferta.descripcion }}</strong>?</p>
+            <button class="btn btn-danger" type="submit">Si, confirmar</button>
+            <a href="{% url 'listar_ofertas' %}">
+               <input class="btn btn-secondary" type="button" value="Cancelar" />
+            </a>
+        </form>
+    </div>
+{% endblock %}
+
+{% block import_footer %}
+
+{% endblock %}

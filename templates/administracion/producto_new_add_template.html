@@ -1,0 +1,32 @@
+{% extends 'administracion/base.html'%}
+
+{% block import_head %}
+
+{% endblock %}
+
+
+{% block title_page%}
+    {%  if state == 'create' %}
+        Crear Producto
+    {% else %}
+        Editar Producto
+    {% endif %}
+{% endblock %}
+
+
+{% block content%}
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div>
+            <button class="btn btn-primary">{{ button_text }}</button>
+            <a href="{% url 'listar_productos' %}">
+               <input class="btn btn-secondary" type="button" value="Cancelar" />
+            </a>
+        </div>
+    </form>
+{% endblock %}
+
+{% block import_footer %}
+
+{% endblock %}

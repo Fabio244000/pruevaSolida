@@ -1,0 +1,40 @@
+{% extends 'administracion/base.html'%}
+
+{% block import_head %}
+
+{% endblock %}
+
+
+{% block title_page%}
+    Detalles del producto: {{ producto.id }}
+{% endblock %}
+
+
+{% block content%}
+    <div id="producto-detalle">
+        <p style="text-align: left; font-size: large">Descripcion: <strong>{{ producto.descripcion }}</strong></p>
+        <img style="text-align: left; font-size: large" src="#" alt="foto de referencia del producto">
+        <p style="text-align: left; font-size: large"><strong>{{ producto.detalles }}</strong></p>
+        <p style="text-align: left; font-size: large"><strong>{{ producto.dellates }}</strong></p>
+        <p style="text-align: left; font-size: large">Tipo: <strong>{{ producto.tipo }}</strong></p>
+        <p style="text-align: left; font-size: large">Precio: <strong>S/. {{ producto.precio }}</strong></p>
+        <p style="text-align: left; font-size: large">precio de venta: <strong>S/. {{ producto.precio_compra }}</strong></p>
+        <p style="text-align: left; font-size: large">Fecha de creacion: <strong>{{ producto.creadoEn }}</strong></p>
+        <p style="text-align: left; font-size: large">Fecha de ultima modificacion: <strong>{{ producto.modificadoEn }}</strong></p>
+        {% if producto.activo is True %}
+            <p style="text-align: left; font-size: large">Estado: <strong>Si</strong></p>
+        {% else %}
+            <p style="text-align: left; font-size: large">Estado: <strong>No</strong></p>
+        {% endif %}
+        <p style="text-align: left; font-size: large">Categoria: <strong>{{ producto.categoria }}</strong></p>
+        <p style="text-align: left; font-size: large">Puntuacion: <strong>{{ producto.puntuacion }}</strong></p>
+        <p style="text-align: left; font-size: large">Cantidad: <strong>{{ producto.cantidad }}</strong></p>
+        <a href="{% url 'listar_productos' %}">
+            <input class="btn btn-primary" type="button" value="Volver">
+        </a>
+    </div>
+{% endblock %}
+
+{% block import_footer %}
+
+{% endblock %}
